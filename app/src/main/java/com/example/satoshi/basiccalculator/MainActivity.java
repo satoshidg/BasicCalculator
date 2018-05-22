@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView display;
     String toDisplay;
-    String operators = "+-X÷";
+    String operators = "+-x÷";
     String nonnumber = "+-x÷().";
     String nonnumberCalc = "+-x÷()";
     String numbers = "0123456789";
@@ -112,24 +112,31 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Integer> pri = new ArrayList<Integer>(); //priority
             ArrayList<String> oper = new ArrayList<String>(); //operator with next value
             int currentPrio = 0;
+            int prioToCalc = 0;
             for(int i = 0; i < toDisplay.length(); i++){
+                System.out.println("Current Priority is: " + currentPrio);
                 String currentString = String.valueOf(toDisplay.charAt(i));
-                System.out.println(currentString);
+                System.out.println("Current String is: " + currentString);
                 if(operators.contains(currentString)){
                     if(currentString.equals("x") || currentString.equals("÷")){
                         currentPrio++;
+                        prioToCalc = currentPrio;
                     }
                     oper.add(currentString);
+                    pri.add(currentPrio);
                 }else if(currentString.equals("(")){
                     currentPrio++;
+                    prioToCalc = currentPrio;
                     if(i != 0 && numbers.contains(String.valueOf(toDisplay.charAt(i)))){
                         oper.add("x");
                     }
+                    pri.add(currentPrio);
                 }else if(currentString.equals(")")) {
                     currentPrio--;
                     if(i != toDisplay.length()-1 && numbers.contains(String.valueOf(toDisplay.charAt(i+1)))){
                         oper.add("x");
                     }
+                    pri.add(currentPrio);
                 }else if(numbers.contains(currentString)){
                     String num = "";
                     while (numbersPlusDot.contains(currentString)) {
@@ -146,25 +153,24 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     nums.add(Double.valueOf(num));
-                    pri.add(currentPrio);
                 }else{
                     oper.add(currentString);
                 }
             }
+
+            System.out.println(nums);
+            System.out.println(pri);
+            System.out.println(oper);
             
-            //calculate the number
-            int prioToCalc = 0;
-            for(int i: pri){
-                if(i > prioToCalc){
-                    prioToCalc = i;
-                }
-            }
-            pri.remove(pri.size()-1);
+
             System.out.println("Nums: " + nums);
             System.out.println("Oper: " + oper);
             System.out.println("Prio: " + pri);
             //TODO: you have to think about going through multiple times n managing priority number you are working on.
             while(prioToCalc >= 0) {
+                System.out.println("Nums: " + nums);
+                System.out.println("Oper: " + oper);
+                System.out.println("Prio: " + pri);
                 int currentPos = 0;
                 while (currentPos < pri.size()) {
                     if (pri.get(currentPos) == prioToCalc) {
