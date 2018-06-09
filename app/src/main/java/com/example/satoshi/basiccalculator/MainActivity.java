@@ -1,5 +1,6 @@
 package com.example.satoshi.basiccalculator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -127,16 +128,16 @@ public class MainActivity extends AppCompatActivity {
                 }else if(currentString.equals("(")){
                     currentPrio++;
                     prioToCalc = currentPrio;
-                    if(i != 0 && numbers.contains(String.valueOf(toDisplay.charAt(i)))){
+                    if(i != 0 && numbers.contains(String.valueOf(toDisplay.charAt(i-1)))){
                         oper.add("x");
+                        pri.add(currentPrio);
                     }
-                    pri.add(currentPrio);
                 }else if(currentString.equals(")")) {
                     currentPrio--;
                     if(i != toDisplay.length()-1 && numbers.contains(String.valueOf(toDisplay.charAt(i+1)))){
                         oper.add("x");
+                        pri.add(currentPrio);
                     }
-                    pri.add(currentPrio);
                 }else if(numbers.contains(currentString)){
                     String num = "";
                     while (numbersPlusDot.contains(currentString)) {
@@ -236,5 +237,10 @@ public class MainActivity extends AppCompatActivity {
             return bracketCount-1;
         }
         return bracketCount;
+    }
+
+    public void onClickSudoku(View v){
+        Intent intent = new Intent(this, SudokuSolver.class);
+        startActivity(intent);
     }
 }
